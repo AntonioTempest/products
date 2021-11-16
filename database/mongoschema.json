@@ -1,0 +1,31 @@
+
+{
+  "products" : {
+    "_id": {"bsonType": "objectID"},
+    "name": {"bsonType": "string"},
+    "slogan": {"bsonType": "string"},
+    "description": {"bsonType": "string"},
+    "category": {"bsonType": "string"},
+    "default_price": {"bsonType": "number"},
+    "productInformation" : {
+      "feature": {"bsonType": "string"},
+      "value": {"bsonType": "string"}
+    },
+    "results" : {
+      "style_id": {"bsonType": "number"},
+      "name": {"bsonType": "string"},
+      "original_price": {"bsonType": "number"},
+      "sale_price": {"bsonType": "number"},
+      "default": {"bsonType": "bool"},
+      "photos": {"bsonType": "array"}
+    },
+    "skus": {
+      "skuID": {"bsonType": "number"},
+      "quantity": {"bsonType": "number"},
+      "size": {"bsonType": "string"}
+    },
+    "related": {
+      "related_id": {"bsonType": "array"}
+    }
+  }
+}
