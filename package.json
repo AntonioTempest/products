@@ -4,7 +4,9 @@
   "description": "SDC products",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "nodemon index.js",
+    "load": "npx run database/etl.js"
   },
   "repository": {
     "type": "git",
@@ -23,9 +25,12 @@
   "homepage": "https://github.com/AntonioTempest/products#readme",
   "dependencies": {
     "airbnb": "^0.0.2",
+    "axios": "^0.24.0",
     "express": "^4.17.1",
+    "fast-csv": "^4.3.6",
     "node": "^17.1.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "pg": "^8.7.1"
   },
   "devDependencies": {
     "eslint": "^8.2.0",

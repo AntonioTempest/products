@@ -1,42 +1,54 @@
+SELECT 'CREATE DATABASE proddb' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'myNewDB')\gexec
 
+\c proddb;
 
-CREATE TABLE products (
-  id INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  name VARCHAR(50) NULL DEFAULT NULL,
-  slogan VARCHAR(100) NULL DEFAULT NULL,
+CREATE TABLE product (
+  id INTEGER,
+  name TEXT NULL DEFAULT NULL,
+  slogan TEXT NULL DEFAULT NULL,
   description VARCHAR NULL DEFAULT NULL,
-  category VARCHAR(50) NULL DEFAULT NULL,
+  category VARCHAR NULL DEFAULT NULL,
   default_price INTEGER NULL DEFAULT NULL,
   PRIMARY KEY (id)
 );
 
+-- Table 'features'
 
--- Table 'productInformation'
 
-
-CREATE TABLE productInformation (
+CREATE TABLE features (
   id INTEGER,
-  feature VARCHAR(50) NULL DEFAULT NULL,
-  value VARCHAR(50) NULL DEFAULT NULL,
+  product_id INTEGER,
+  feature VARCHAR NULL DEFAULT NULL,
+  value VARCHAR NULL DEFAULT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (id) REFERENCES products(id)
+  FOREIGN KEY (product_id) REFERENCES product (id)
 );
 
--- Table 'styles'
---
 
 -- Table 'results'
+--
 
-CREATE TABLE results (
+CREATE TABLE styles (
   id INTEGER,
-  style_id INTEGER NULL DEFAULT NULL,
-  name VARCHAR(50) NULL DEFAULT NULL,
-  original_price INTEGER NULL DEFAULT NULL,
-  sale_price INTEGER NULL DEFAULT 0,
-  default? BINARY NULL DEFAULT false,
-  photos JSON NULL DEFAULT NULL COMMENT 'JSON formatted string',
+  productId INTEGER NULL DEFAULT NULL,
+  name VARCHAR NULL DEFAULT NULL,
+  sale_price VARCHAR DEFAULT NULL,
+  original_price INTEGER NULL DEFAULT 0,
+  default_style boolean DEFAULT 'false',
   PRIMARY KEY (id),
-  FOREIGN KEY (id) REFERENCES products(id)
+  FOREIGN KEY (productId) REFERENCES product (id)
+);
+
+-- Table 'photos'
+--
+
+CREATE TABLE photos (
+  id INTEGER,
+  styleId INTEGER,
+  url VARCHAR,
+  thumbnail_url VARCHAR,
+  PRIMARY KEY (id),
+  FOREIGN KEY (styleId) REFERENCES styles (id)
 );
 
 -- Table 'skus'
@@ -44,19 +56,35 @@ CREATE TABLE results (
 
 CREATE TABLE skus (
   id INTEGER,
-  skuID INTEGER NULL DEFAULT NULL,
+  styleId INTEGER NULL DEFAULT NULL,
+  size VARCHAR NULL DEFAULT NULL,
   quantity INTEGER NULL DEFAULT NULL,
-  size VARCHAR(5) NULL DEFAULT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (id) REFERENCES products(id)
+  FOREIGN KEY (styleId) REFERENCES styles (id)
 );
 
 -- Table 'related'
 --
 
+
 CREATE TABLE related (
   id INTEGER,
-  related_id INTEGER NULL DEFAULT NULL COMMENT 'related products',
+  current_product_id INTEGER,
+  related_product_id INTEGER,
   PRIMARY KEY (id),
-  FOREIGN KEY (id) REFERENCES products(id)
+  FOREIGN KEY (current_product_id) REFERENCES product (id)
+);
+
+-- Table 'features'
+--
+
+
+-- Table 'results_skus'
+--
+
+CREATE TABLE styles_skus (
+  id serial,
+  styles_id INTEGER REFERENCES styles (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  skus_id INTEGER REFERENCES skus (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY (id)
 );
