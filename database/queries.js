@@ -11,10 +11,24 @@ const prods = new Pool({
 
 const dataQueries = {}
 
-dataQueries.getProducts = function() {
-  const response = prods.query('select * from product limit 5')
+dataQueries.getProducts = function(request) {
+  // console.log(request.query)
+  let numResults = 5;
+  if (request.query.count) {
+    numResults = request.query.count;
+  }
+  let page = 1;
+  const response = prods.query(`select * from product limit ${numResults}`);
   return response;
 }
+
+dataQueries.getProductId = (request) => {
+  product = request.params.product_id
+  const response = prods.query(`select * from product left outer join features on product.id = features.product_id where product.id = '${product}'`);
+  return response;
+}
+
+
 
 
 
