@@ -167,7 +167,18 @@ app.get('/products/:product_id/styles', (req, res) => {
 })///
 
 
-app.get('/products/:product_id/related')
+app.get('/products/:product_id/related', (req, res) => {
+  console.log('index.js app get related')
+  return (db.getRelated(req))
+    .then(dbAnswer => {
+      var relatedProds = [];
+      for (var i = 0; i < dbAnswer.rows.length; i++) {
+        relatedProds.push(dbAnswer.rows[i]["related_product_id"])
+      }
+      res.status(200).send(relatedProds)
+    })
+    .catch(err => res.status(500).send(err))
+})
 
 
 app.listen(port, () => {

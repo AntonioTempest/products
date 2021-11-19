@@ -29,7 +29,7 @@ dataQueries.getProductId = (request) => {
 }
 
 dataQueries.getProductStyles = (request) => {
-  product = request.params.product_id;
+  var product = request.params.product_id;
   // const response = prods.query(`select * from product
   //                               left outer join styles
   //                               on product.id = styles.productid
@@ -44,6 +44,13 @@ dataQueries.getProductStyles = (request) => {
                                 on styles.id = skus.styleid
                                 where styles.productid = '${product}'
                                 `);
+  return response;
+}
+
+dataQueries.getRelated = function(request) {
+  var product = request.params.product_id;
+  const response = prods.query(`select * from related where current_product_id = ${product}`);
+  console.log('returning')
   return response;
 }
 
