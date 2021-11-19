@@ -23,8 +23,27 @@ dataQueries.getProducts = function(request) {
 }
 
 dataQueries.getProductId = (request) => {
-  product = request.params.product_id
+  product = request.params.product_id;
   const response = prods.query(`select * from product left outer join features on product.id = features.product_id where product.id = '${product}'`);
+  return response;
+}
+
+dataQueries.getProductStyles = (request) => {
+  product = request.params.product_id;
+  // const response = prods.query(`select * from product
+  //                               left outer join styles
+  //                               on product.id = styles.productid
+  //                               left outer join photos
+  //                               on styles.id = photos.styleid
+  //                               where product.id = '${product}'`);
+  const response = prods.query(`
+                                select * from styles
+                                left outer join photos
+                                on styles.id = photos.styleid
+                                left outer join skus
+                                on styles.id = skus.styleid
+                                where styles.productid = '${product}'
+                                `);
   return response;
 }
 
