@@ -4,7 +4,7 @@
   "description": "SDC products",
   "main": "index.js",
   "scripts": {
-    "test": "test",
+    "test": "jest",
     "start": "nodemon index.js",
     "load": "npx run database/etl.js"
   },
@@ -28,6 +28,8 @@
     "axios": "^0.24.0",
     "express": "^4.17.1",
     "fast-csv": "^4.3.6",
+    "frisby": "^2.1.3",
+    "jest": "^27.3.1",
     "node": "^17.1.0",
     "nodemon": "^2.0.15",
     "pg": "^8.7.1"

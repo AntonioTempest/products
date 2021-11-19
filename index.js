@@ -29,15 +29,12 @@ app.get('/products/:product_id', (req, res) => {
       var clientResponse = {};
       var features = [];
       for (var i = 0; i < dbResults.rows.length; i++) {
-        // console.log(dbResults.rows[i].feature)
-        // console.log(dbResults.rows[i].value)
         var featureSet = {
           "feature": dbResults.rows[i].feature,
           "value" : dbResults.rows[i].value,
         }
-        // console.log('featureset ', featureSet)
          features.push(featureSet)
-       };
+       }
       //  console.log('featuresarray' , dbResults.rows[0]['product_id'])
        clientResponse['id'] = dbResults.rows[0]['product_id'];
        clientResponse['name'] = dbResults.rows[0]['name']
@@ -75,10 +72,10 @@ app.get('/products/:product_id/styles', (req, res) => {
            )
             photoCatalogue[rows[i]["styleid"]].push({"thumbnail_url": rows[i]["thumbnail_url"], "url": rows[i]["url"]})
         }
-      };
+      }
 
       var skuCatalogue = {}; // sku index
-      for (var i = 0; i < rows.length; i++) {
+      for (let i = 0; i < rows.length; i++) {
         if (!skuCatalogue[rows[i]["styleid"]]) {
           skuCatalogue[rows[i]["styleid"]] = [{[rows[i]["id"]] : {
             "quantity": rows[i]["quantity"],
@@ -97,68 +94,56 @@ app.get('/products/:product_id/styles', (req, res) => {
 
       var checkStyleId = []; //the controls whether the id will be recreated
 
-      for (var i = 0; i < rows.length; i++) {
+      for (let i = 0; i < rows.length; i++) {
         if (checkStyleId.includes(rows[i]['styleid'])) {
           continue;
         } else {
           checkStyleId.push(rows[i]['styleid'])
-          styleObj = {};
-          photos = [];
+          var styleObj = {};
+          // var photos = [];
           styleObj["style_id"] = rows[i]["styleid"],
           styleObj["name"] = rows[i]["name"],
           styleObj["original_price"] = rows[i]["original_price"],
           styleObj["sale_price"] = rows[i]["sale_price"],
           styleObj["default?"] = rows[i]["default_style"],
-          styleObj["photos"] = [  photoCatalogue[rows[i]["styleid"]]   ],
-          styleObj["skus"] =    skuCatalogue[rows[i]["styleid"]]    ,
+          styleObj["photos"] = [  photoCatalogue[rows[i]["styleid"]]],
+          styleObj["skus"] =    skuCatalogue[rows[i]["styleid"]],
           clientResponse["results"].push(styleObj)
-        };
+        }
       }
       return clientResponse;
     })
     .then(messy => { //cleaning extra data you don't want to send--optimize...
+      function isNotNull(value) {
+        return typeof(value) === 'object'
+      }
       for (var i = 0; i < messy.results.length; i++) {
         var skus = [];
         for (var j = 0; j < messy.results[i]["skus"].length; j++) {
-          // console.log(messy.results[i]["skus"][j])
           var stringed = JSON.stringify(messy.results[i]["skus"][j]);
           if (skus.includes(stringed)) {
-            delete messy.results[i]["skus"][j]
+            delete messy.results[i]["skus"][j];
           } else {
-            skus.push(stringed)
+            skus.push(stringed);
           }
         }
-        // console.log('before:-------------  ', messy.results[i]["skus"])
-        function isNotNull(value) {
-          // console.log(typeof(value))
-          return typeof(value) === 'object'
-        }
-        messy.results[i]["skus"] = messy.results[i]["skus"].filter(isNotNull)
-        // console.log('after---------------' , messy.results[i]["skus"])
+        messy.results[i]["skus"] = messy.results[i]["skus"].filter(isNotNull);
       }
 
-      for (var i = 0; i < messy.results.length; i++) {
+      for (let i = 0; i < messy.results.length; i++) {
         var photos = [];
-        for (var j = 0; j < messy.results[i]["photos"].length; j++) {
-          var stringed = JSON.stringify(messy.results[i]["photos"][j]);
-          // console.log(stringed)
+        for (let j = 0; j < messy.results[i]["photos"].length; j++) {
+          let stringed = JSON.stringify(messy.results[i]["photos"][j]);
           if (stringed === messy.results[i]["photos"][j-1]) {
-            // console.log('deleting something')
-            delete messy.results[i]["photos"][j]
+            delete messy.results[i]["photos"][j];
           } else {
-            photos.push(stringed)
+            photos.push(stringed);
           }
-        }
-        // console.log('before:-------------  ', messy.results[i]["photos"])
-        function isNotNull(value) {
-          // console.log(typeof(value))
-          return typeof(value) === 'object'
         }
         messy.results[i]["photos"] = messy.results[i]["photos"].filter(isNotNull)
-        // console.log('after---------------' , messy.results[i]["skus"])
       }
 
-      console.log('cleaning completed')
+      console.log('cleaning completed');
 
       return messy;
     })
