@@ -8,6 +8,11 @@
     "start": "nodemon index.js",
     "load": "npx run database/etl.js"
   },
+  "jest": {
+    "verbose": true,
+    "collectCoverage": true,
+    "collectCoverageFrom": ["index.js", "database/queries.js"]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AntonioTempest/products.git"

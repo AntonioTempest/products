@@ -54,8 +54,4 @@ dataQueries.getRelated = function(request) {
   return response;
 }
 
-
-
-
-
 module.exports = dataQueries

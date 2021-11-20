@@ -13,7 +13,7 @@ it('call to a fake product should return a server code 500', function () {
     .expect('status', 500);
 });
 
-it('should return some picture urls', function () {
+xit('should return some picture urls', function () {
   return frisby
     .get('http:/localhost:3000/products/900000/styles')
     .expect('bodyContains', 'thumbnail_url')
