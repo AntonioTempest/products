@@ -17,7 +17,7 @@ dataQueries.getProducts = function(request) {
   if (request.query.count) {
     numResults = request.query.count;
   }
-  // let page = 1;
+
   const response = prods.query(`select * from product limit ${numResults}`);
   return response;
 }
@@ -53,5 +53,27 @@ dataQueries.getRelated = function(request) {
   console.log('returning')
   return response;
 }
+
+dataQueries.getStyloos = (request) => {
+  var product = request.params.product_id;
+  // console.log('product,  ', product)
+  const response = prods.query (`
+    select st.*,
+      json_agg(distinct jsonb_build_object('url', pt.url, 'thumbnail_url', pt.thumbnail_url)) as photos,
+      json_object_agg(
+        sk.id, json_build_object('quantity', quantity, 'size', size)
+      ) as skus
+    from styles st
+    join photos pt  on st.id = pt.styleid
+    join skus sk on st.id = sk.styleid
+    where st.productid = ${product}
+    group by st.id
+  `)
+  console.log('did a query');
+
+  return response;
+}
+
+
 
 module.exports = dataQueries

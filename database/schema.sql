@@ -88,3 +88,5 @@ CREATE TABLE styles_skus (
   skus_id INTEGER REFERENCES skus (id) ON DELETE CASCADE ON UPDATE CASCADE,
   PRIMARY KEY (id)
 );
+
+-- CREATE INDEX CONCURRENTLY ON public.photos USING btree (styleid);

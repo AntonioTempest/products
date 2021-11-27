@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 
 
 app.get('/products', (req, res) => {
-  console.log('wrong thing received')
+  // console.log('wrong thing received')
   return db.getProducts(req)
     .then(results => res.status(200).send(results.rows))
     .catch(err => res.status(500).send(err));
@@ -50,6 +50,19 @@ app.get('/products/:product_id', (req, res) => {
     .catch(err => res.status(500).send(err));
 })
 
+
+app.get('/products/:product_id/styloos', (req, res) => {
+  console.log('styloos' , req.params)
+  return db.getStyloos(req)
+    .then(dbResponse => {
+      let clientResponse = {
+        "product_id": dbResponse.rows[0]["productid"].toString(),
+        "results": dbResponse.rows
+      }
+      res.status(200).send(clientResponse)
+    })
+    .catch(err => res.status(500).send(err));
+})
 
 app.get('/products/:product_id/styles', (req, res) => {
   console.log('index.js app.get product styles' , req.params)
@@ -147,7 +160,7 @@ app.get('/products/:product_id/styles', (req, res) => {
 
       return messy;
     })
-    .then(dbResponse => res.status(200).send(dbResponse))
+    .then(cleanedResponse => res.status(200).send(cleanedResponse))
     .catch(err => res.status(500).send(err))
 })///
 
