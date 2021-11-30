@@ -12,9 +12,14 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
+app.get('/loaderio-f7ef9a78d552e67898157df715e9c182', (req, res) => {
+  res.status(200).send('loaderio-f7ef9a78d552e67898157df715e9c182')
+})
+
+
 
 app.get('/products', (req, res) => {
-  // console.log('wrong thing received')
+  console.log(req.headers);  // console.log('wrong thing received')
   return db.getProducts(req)
     .then(results => res.status(200).send(results.rows))
     .catch(err => res.status(500).send(err));
