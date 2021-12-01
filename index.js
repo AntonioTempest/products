@@ -1,12 +1,18 @@
 const express = require('express');
 const db = require('./database/queries.js');
+<<<<<<< HEAD
 const payload = require('./payload.json')
+=======
+const NodeCache = require('node-cache');
+
+>>>>>>> 4d77ce67cd8e0f745df763e9ec4d7d2aa3ded278
 
 const app = express();
 app.use(express.json())
 
 
 const port = 3000;
+const cache = new NodeCache();
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -62,15 +68,21 @@ app.get('/products/:product_id', (req, res) => {
 
 app.get('/products/:product_id/styles', (req, res) => {
   console.log('styloos' , req.params)
-  return db.getProductStyles(req)
-    .then(dbResponse => {
-      let clientResponse = {
-        "product_id": dbResponse.rows[0]["productid"].toString(),
-        "results": dbResponse.rows
-      }
-      res.status(200).send(clientResponse)
-    })
-    .catch(err => res.status(500).send(err));
+  const check = cache.get(req.params)
+  if (check) {
+    res.status(200).send(cache.get(req.params))
+  } else {
+    return db.getProductStyles(req)
+      .then(dbResponse => {
+        let clientResponse = {
+          "product_id": dbResponse.rows[0]["productid"].toString(),
+          "results": dbResponse.rows
+        }
+        res.status(200).send(clientResponse)
+        cache.set(req.params, clientResponse, 60000)
+      })
+      .catch(err => res.status(500).send(err));
+  }
 })
 
 // app.get('/products/:product_id/styles', (req, res) => {
