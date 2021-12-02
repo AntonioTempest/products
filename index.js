@@ -1,7 +1,11 @@
 const express = require('express');
 const db = require('./database/queries.js');
+<<<<<<< HEAD
+const payload = require('./payload.json')
+=======
 const NodeCache = require('node-cache');
 
+>>>>>>> 4d77ce67cd8e0f745df763e9ec4d7d2aa3ded278
 
 const app = express();
 app.use(express.json())
@@ -14,8 +18,12 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.get('/loaderio-f7ef9a78d552e67898157df715e9c182', (req, res) => {
-  res.status(200).send('loaderio-f7ef9a78d552e67898157df715e9c182')
+app.get('/products/payload3.json', (req, res) => {
+  res.status(200).send(payload)  
+})
+
+app.get('/loaderio-b0bc60b6e79d034f608e41d16363b797', (req, res) => {
+  res.status(200).send('loaderio-b0bc60b6e79d034f608e41d16363b797')
 })
 
 
