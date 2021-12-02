@@ -75,6 +75,6 @@ dataQueries.getProductStyles = (request) => {
   return response;
 }
 
-
+//create index concurrently on styles (productid);
 
 module.exports = dataQueries

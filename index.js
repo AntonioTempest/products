@@ -60,10 +60,6 @@ app.get('/products/:product_id', (req, res) => {
 
 app.get('/products/:product_id/styles', (req, res) => {
   console.log('styloos' , req.params)
-  const check = cache.get(req.params)
-  if (check) {
-    res.status(200).send(cache.get(req.params))
-  } else {
     return db.getProductStyles(req)
       .then(dbResponse => {
         let clientResponse = {
@@ -74,7 +70,7 @@ app.get('/products/:product_id/styles', (req, res) => {
         cache.set(req.params, clientResponse, 60000)
       })
       .catch(err => res.status(500).send(err));
-  }
+  
 })
 
 // app.get('/products/:product_id/styles', (req, res) => {

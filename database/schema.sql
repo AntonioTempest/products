@@ -89,4 +89,6 @@ CREATE TABLE styles_skus (
   PRIMARY KEY (id)
 );
 
+--create index concurrently on styles (productid);
+
 -- CREATE INDEX CONCURRENTLY ON public.photos USING btree (styleid);
